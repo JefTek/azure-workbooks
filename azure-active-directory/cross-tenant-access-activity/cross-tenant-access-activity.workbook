@@ -4,7 +4,7 @@
     {
       "type": 1,
       "content": {
-        "json": "## Cross tenant access activity - inbound and outbound external Azure AD tenant activity\r\nUsing this workbook, a tenant administrator can visualize the inbound and outbound activity involving their users accessing external tenants (outbound) and/or users from external Azure AD tenants accessing their local resources."
+        "json": "## Cross-tenant inbound and outbound access activity for Azure AD tenants\r\nTenant administrators who are making changes to policies governing cross-tenant access can use this workbook to visualize and review existing access activity patterns before making policy changes."
       },
       "customWidth": "70",
       "name": "text - 0"
@@ -62,7 +62,7 @@
     {
       "type": 1,
       "content": {
-        "json": "### Steps for discovery of cross tenant access activity\r\nAs businesses collaborate across organizations,  they access external tenant resources or invite external users to access local resources using Azure AD B2B.\r\n\r\nUtilizing the the sign-in log telemetry, a tenant administrator can visualize and review the inbound and outbound cross-tenant activity.\r\n- **Outbound Access** - Local users in this tenant who are accessing resources in external tenants utilizing Azure AD B2B\r\n- **Inbound Access** - External users who have been invited to access local resources in this tenant utilizing Azure AD B2B\r\n\r\nSign-in events from the interactive SigninLogs log for specified applications by their ResourceIdentity are evaluated to provide insights into the inbound and outbound activity for this tenant.  Information is presented for the ExternalTenantId from the log events to visualize the activity between the this tenant and the associated external tenant."
+        "json": "### Discovery of cross-tenant access activity\r\nTo use this workbook, you must first understand the difference between **outbound** access and **inbound** access. As businesses collaborate across organizations, they access external tenant resources or invite external users to access local resources using Azure AD B2B. Outbound access occurs when local users in your tenant access resources in external tenants. Inbound access occurs when external users access local resources in your tenant after signing in. With Azure AD interactive sign-in log telemetry, a tenant administrator can visualize and review the inbound and outbound cross-tenant activity. \r\n\r\nThis workbook is divided into 4 steps, each of which builds on the previous step. You will start by selecting an external tenant represented by the tenantId in step 1. From there, you choose whether to focus on inbound access or outbound access in step 2. In step 3, you can select an app to zoom in on the users of that app in step 4.  You can also disable showing this guide with the toggle above.\r\n"
       },
       "conditionalVisibility": {
         "parameterName": "Guide",
@@ -201,7 +201,7 @@
               "size": 0,
               "showAnalytics": true,
               "timeContext": {
-                "durationMs": 0
+                "durationMs": 2419200000
               },
               "timeContextFromParameter": "TimeRange",
               "exportFieldName": "ExternalTenantId",
@@ -225,6 +225,7 @@
                     "columnMatch": "OutboundSignInsTotal",
                     "formatter": 4,
                     "formatOptions": {
+                      "min": 0,
                       "palette": "blue",
                       "customColumnWidthSetting": "10%"
                     },
@@ -240,14 +241,23 @@
                     "columnMatch": "OutboundSignInsFailure",
                     "formatter": 4,
                     "formatOptions": {
-                      "palette": "blueDark",
+                      "min": 0,
+                      "palette": "blue",
                       "customColumnWidthSetting": "10%"
+                    },
+                    "numberFormat": {
+                      "unit": 0,
+                      "options": {
+                        "style": "decimal"
+                      },
+                      "emptyValCustomText": "0"
                     }
                   },
                   {
                     "columnMatch": "OutboundUsers",
                     "formatter": 4,
                     "formatOptions": {
+                      "min": 0,
                       "palette": "blue",
                       "customColumnWidthSetting": "10%"
                     },
@@ -263,6 +273,7 @@
                     "columnMatch": "OutboundApps",
                     "formatter": 4,
                     "formatOptions": {
+                      "min": 0,
                       "palette": "blue",
                       "customColumnWidthSetting": "10%"
                     },
@@ -278,6 +289,7 @@
                     "columnMatch": "InboundSignInsTotal",
                     "formatter": 4,
                     "formatOptions": {
+                      "min": 0,
                       "palette": "orange",
                       "customColumnWidthSetting": "10%"
                     },
@@ -293,7 +305,8 @@
                     "columnMatch": "InboundSignInsFailure",
                     "formatter": 4,
                     "formatOptions": {
-                      "palette": "redDark",
+                      "min": 0,
+                      "palette": "orange",
                       "customColumnWidthSetting": "10%"
                     },
                     "numberFormat": {
@@ -308,6 +321,7 @@
                     "columnMatch": "InboundUsers",
                     "formatter": 4,
                     "formatOptions": {
+                      "min": 0,
                       "palette": "orange",
                       "customColumnWidthSetting": "10%"
                     },
@@ -323,6 +337,7 @@
                     "columnMatch": "InboundApps",
                     "formatter": 4,
                     "formatOptions": {
+                      "min": 0,
                       "palette": "orange",
                       "customColumnWidthSetting": "10%"
                     },
@@ -412,7 +427,7 @@
                 {
                   "type": 1,
                   "content": {
-                    "json": "# Step 2 - Select outbound or inbound activity\r\nWhen external users are invited to access resources in this local tenant using Azure AD B2B from external Azure AD tenants,  this is considered #inbound# access activity.\r\nWhen users local to this tenant, are invited to access resources in external tenants,  this is considered outbound access activity.\r\n\r\nYou can use the tabs below to review the inbound and outbound access activity after selected a tenant from the above overview list."
+                    "json": "# Step 2 - Select outbound or inbound access activity\r\nWhen external users are invited to access resources in this local tenant using Azure AD B2B from external Azure AD tenants,  this is considered #inbound# access activity.\r\nWhen users local to this tenant, are invited to access resources in external tenants,  this is considered outbound access activity.\r\n\r\nYou can use the tabs below to review the inbound and outbound access activity after selected a tenant from the above overview list."
                   },
                   "conditionalVisibility": {
                     "parameterName": "Guide",
@@ -469,7 +484,7 @@
                       {
                         "type": 1,
                         "content": {
-                          "json": "### Outbound Sign-In Status Guide\r\n\r\nLocal users who are accessing resources in external tenants may be blocked based on the policy settings of this tenant or the external tenant.    By reviewing the sign-in status of outbound activity admins can determine if they need to work with the external tenant admin to resolve unexpected sign-in failures based on the reason for the failure.\r\n\r\nAdditional information to aid in understanding sign-in results and controls availiable can be found below:\r\n\r\n- [Azure AD Authentication and authorization error codes](https://docs.microsoft.com/en-us/azure/active-directory/develop/reference-aadsts-error-codes)\r\n- [Restrict access to a tenant](https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/tenant-restrictions)\r\n- [Azure AD Conditional Access documentation](https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/)\r\n- [Identity Protection and B2B Users](https://docs.microsoft.com/en-us/azure/active-directory/identity-protection/concept-identity-protection-b2b)\r\n"
+                          "json": "### Outbound sign-in status guide\r\n\r\nLocal users who are accessing resources in external tenants may be blocked based on the policy settings of this tenant or the external tenant.    By reviewing the sign-in status of outbound activity admins can determine if they need to work with the external tenant admin to resolve unexpected sign-in failures based on the reason for the failure.\r\n\r\nAdditional information to aid in understanding sign-in results and controls availiable can be found below:\r\n\r\n- [Azure AD Authentication and authorization error codes](https://docs.microsoft.com/en-us/azure/active-directory/develop/reference-aadsts-error-codes)\r\n- [Restrict access to a tenant](https://docs.microsoft.com/en-us/azure/active-directory/manage-apps/tenant-restrictions)\r\n- [Azure AD Conditional Access documentation](https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/)\r\n- [Identity Protection and B2B Users](https://docs.microsoft.com/en-us/azure/active-directory/identity-protection/concept-identity-protection-b2b)\r\n"
                         },
                         "conditionalVisibility": {
                           "parameterName": "Guide",
@@ -489,7 +504,7 @@
                           "title": "Outbound sign-in status summary for selected external tenant",
                           "noDataMessage": "Please select an external tenant ID with outbound sign-in activity",
                           "timeContext": {
-                            "durationMs": 0
+                            "durationMs": 2419200000
                           },
                           "timeContextFromParameter": "TimeRange",
                           "queryType": 0,
@@ -503,8 +518,16 @@
                                 "columnMatch": "statusCount",
                                 "formatter": 4,
                                 "formatOptions": {
-                                  "palette": "magenta",
+                                  "min": 0,
+                                  "palette": "blueDark",
                                   "customColumnWidthSetting": "10%"
+                                },
+                                "numberFormat": {
+                                  "unit": 0,
+                                  "options": {
+                                    "style": "decimal"
+                                  },
+                                  "emptyValCustomText": "0"
                                 }
                               },
                               {
@@ -626,7 +649,7 @@
                           "title": "Outbound application activity by selected tenant",
                           "noDataMessage": "Please select an external tenant ID with outbound sign-in activity",
                           "timeContext": {
-                            "durationMs": 0
+                            "durationMs": 2419200000
                           },
                           "timeContextFromParameter": "TimeRange",
                           "exportFieldName": "ResourceIdentity",
@@ -652,21 +675,45 @@
                                 "columnMatch": "OutboundAppUsers",
                                 "formatter": 4,
                                 "formatOptions": {
-                                  "palette": "orange"
+                                  "min": 0,
+                                  "palette": "turquoise"
+                                },
+                                "numberFormat": {
+                                  "unit": 0,
+                                  "options": {
+                                    "style": "decimal"
+                                  },
+                                  "emptyValCustomText": "0"
                                 }
                               },
                               {
                                 "columnMatch": "OutboundAppSignInsTotal",
                                 "formatter": 4,
                                 "formatOptions": {
-                                  "palette": "blue"
+                                  "min": 0,
+                                  "palette": "magenta"
+                                },
+                                "numberFormat": {
+                                  "unit": 0,
+                                  "options": {
+                                    "style": "decimal"
+                                  },
+                                  "emptyValCustomText": "0"
                                 }
                               },
                               {
                                 "columnMatch": "OutboundSignInsFailure",
                                 "formatter": 4,
                                 "formatOptions": {
-                                  "palette": "redDark"
+                                  "min": 0,
+                                  "palette": "pink"
+                                },
+                                "numberFormat": {
+                                  "unit": 0,
+                                  "options": {
+                                    "style": "decimal"
+                                  },
+                                  "emptyValCustomText": "0"
                                 }
                               },
                               {
@@ -678,8 +725,8 @@
                             "filter": true,
                             "sortBy": [
                               {
-                                "itemKey": "$gen_bar_OutboundAppUsers_2",
-                                "sortOrder": 1
+                                "itemKey": "$gen_bar_OutboundAppSignInsTotal_3",
+                                "sortOrder": 2
                               }
                             ],
                             "labelSettings": [
@@ -707,8 +754,8 @@
                           },
                           "sortBy": [
                             {
-                              "itemKey": "$gen_bar_OutboundAppUsers_2",
-                              "sortOrder": 1
+                              "itemKey": "$gen_bar_OutboundAppSignInsTotal_3",
+                              "sortOrder": 2
                             }
                           ]
                         },
@@ -737,7 +784,7 @@
                           "title": "Outbound user activity by selected application",
                           "noDataMessage": "Please select an external tenant ID with outbound sign-in activity",
                           "timeContext": {
-                            "durationMs": 0
+                            "durationMs": 2419200000
                           },
                           "timeContextFromParameter": "TimeRange",
                           "exportFieldName": "UserPrincipalName",
@@ -761,16 +808,32 @@
                                 "columnMatch": "OutboundAppUserSignInsTotal",
                                 "formatter": 4,
                                 "formatOptions": {
-                                  "palette": "blue",
+                                  "min": 0,
+                                  "palette": "magenta",
                                   "customColumnWidthSetting": "30%"
+                                },
+                                "numberFormat": {
+                                  "unit": 0,
+                                  "options": {
+                                    "style": "decimal"
+                                  },
+                                  "emptyValCustomText": "0"
                                 }
                               },
                               {
                                 "columnMatch": "OutboundAppUserSignInsFailure",
                                 "formatter": 4,
                                 "formatOptions": {
-                                  "palette": "redDark",
+                                  "min": 0,
+                                  "palette": "pink",
                                   "customColumnWidthSetting": "30%"
+                                },
+                                "numberFormat": {
+                                  "unit": 0,
+                                  "options": {
+                                    "style": "decimal"
+                                  },
+                                  "emptyValCustomText": "0"
                                 }
                               }
                             ],
@@ -855,7 +918,7 @@
                           "title": "Inbound sign-in status summary for selected external tenant",
                           "noDataMessage": "Please select an external tenant ID with inbound sign-in activity",
                           "timeContext": {
-                            "durationMs": 0
+                            "durationMs": 2419200000
                           },
                           "timeContextFromParameter": "TimeRange",
                           "showExportToExcel": true,
@@ -870,8 +933,16 @@
                                 "columnMatch": "statusCount",
                                 "formatter": 4,
                                 "formatOptions": {
-                                  "palette": "magenta",
+                                  "min": 0,
+                                  "palette": "blueDark",
                                   "customColumnWidthSetting": "10%"
+                                },
+                                "numberFormat": {
+                                  "unit": 0,
+                                  "options": {
+                                    "style": "decimal"
+                                  },
+                                  "emptyValCustomText": "0"
                                 }
                               },
                               {
@@ -995,7 +1066,7 @@
                           "title": "Inbound application activity by selected tenant",
                           "noDataMessage": "Please select an external tenant ID with inbound sign-in activity",
                           "timeContext": {
-                            "durationMs": 0
+                            "durationMs": 2419200000
                           },
                           "timeContextFromParameter": "TimeRange",
                           "exportFieldName": "ResourceIdentity",
@@ -1021,21 +1092,45 @@
                                 "columnMatch": "InboundAppUsers",
                                 "formatter": 4,
                                 "formatOptions": {
-                                  "palette": "orange"
+                                  "min": 0,
+                                  "palette": "turquoise"
+                                },
+                                "numberFormat": {
+                                  "unit": 0,
+                                  "options": {
+                                    "style": "decimal"
+                                  },
+                                  "emptyValCustomText": "0"
                                 }
                               },
                               {
                                 "columnMatch": "InboundAppSignInsTotal",
                                 "formatter": 4,
                                 "formatOptions": {
-                                  "palette": "blue"
+                                  "min": 0,
+                                  "palette": "magenta"
+                                },
+                                "numberFormat": {
+                                  "unit": 0,
+                                  "options": {
+                                    "style": "decimal"
+                                  },
+                                  "emptyValCustomText": "0"
                                 }
                               },
                               {
                                 "columnMatch": "InboundSignInsFailure",
                                 "formatter": 4,
                                 "formatOptions": {
-                                  "palette": "redDark"
+                                  "min": 0,
+                                  "palette": "pink"
+                                },
+                                "numberFormat": {
+                                  "unit": 0,
+                                  "options": {
+                                    "style": "decimal"
+                                  },
+                                  "emptyValCustomText": "0"
                                 }
                               },
                               {
@@ -1098,7 +1193,7 @@
                           "title": "Inbound user activity by selected application",
                           "noDataMessage": "Please select an external tenant ID with inbound sign-in activity",
                           "timeContext": {
-                            "durationMs": 0
+                            "durationMs": 2419200000
                           },
                           "timeContextFromParameter": "TimeRange",
                           "exportFieldName": "UserPrincipalName",
@@ -1122,16 +1217,32 @@
                                 "columnMatch": "InboundAppUserSignInsTotal",
                                 "formatter": 4,
                                 "formatOptions": {
-                                  "palette": "blue",
+                                  "min": 0,
+                                  "palette": "magenta",
                                   "customColumnWidthSetting": "30%"
+                                },
+                                "numberFormat": {
+                                  "unit": 0,
+                                  "options": {
+                                    "style": "decimal"
+                                  },
+                                  "emptyValCustomText": "0"
                                 }
                               },
                               {
                                 "columnMatch": "InboundAppUserSignInsFailure",
                                 "formatter": 4,
                                 "formatOptions": {
-                                  "palette": "redDark",
+                                  "min": 0,
+                                  "palette": "pink",
                                   "customColumnWidthSetting": "30%"
+                                },
+                                "numberFormat": {
+                                  "unit": 0,
+                                  "options": {
+                                    "style": "decimal"
+                                  },
+                                  "emptyValCustomText": "0"
                                 }
                               }
                             ],
@@ -1204,6 +1315,5 @@
       "name": "text_selecttenant"
     }
   ],
-
   "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
 }
